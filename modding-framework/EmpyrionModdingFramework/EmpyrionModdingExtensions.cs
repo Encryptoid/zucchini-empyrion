@@ -13,12 +13,12 @@ namespace EmpyrionModdingFramework
         Yellow = 1, // Alert
         Blue = 2 // Attention
     }
+
     partial class EmpyrionModdingFrameworkBase
     {
         public async Task MessagePlayer(int entityId, string msg, float time, MessagerPriority prio = MessagerPriority.Blue)
         {
-            Log("Starting message: " + msg);
-
+            Log($"Messaging entity {entityId}, message: {msg}");
             await RequestManager.SendGameRequest(CmdId.Request_InGameMessage_SinglePlayer, new IdMsgPrio()
             {
                 id = entityId,
@@ -26,7 +26,6 @@ namespace EmpyrionModdingFramework
                 prio = (byte)prio,
                 time = time
             });
-            Log("Finished message: " + msg);
         }
 
         public async Task ShowDialog(int entityId, string msg)
@@ -35,6 +34,18 @@ namespace EmpyrionModdingFramework
             {
                 Id = entityId,
                 MsgText = msg
+            });
+        }
+
+        public async Task TeleportPlayer(int entityId, string playfield, float posX, float posY, float posZ, float rotX, float rotY, float rotZ)
+        {
+            Log($"Teleporting entity: {entityId} to playfield: {playfield}");
+            await RequestManager.SendGameRequest(CmdId.Request_Player_ChangePlayerfield, new IdPlayfieldPositionRotation
+            {
+                id = entityId,
+                playfield = playfield,
+                pos = new PVector3 { x = posX, y = posY, z = posZ},
+                rot = new PVector3 { x = rotX, y = rotY, z = rotZ }
             });
         }
     }

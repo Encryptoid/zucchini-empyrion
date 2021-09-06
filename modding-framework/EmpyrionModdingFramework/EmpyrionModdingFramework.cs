@@ -11,7 +11,7 @@ namespace EmpyrionModdingFramework
         protected static ModGameAPI LegacyAPI { get; private set; }
         protected static IModApi ModAPI { get; private set; }
 
-        protected string ModName { get; private set; }
+        public string ModName { get; set; }
 
         protected ConfigManager ConfigManager { get; private set; }
         protected CommandManager CommandManager { get; private set; }
@@ -34,6 +34,7 @@ namespace EmpyrionModdingFramework
         {
             ModAPI = modApi;
             ModName = Assembly.GetExecutingAssembly().GetName().Name;
+
             ConfigManager = new ConfigManager();
             CommandManager = new CommandManager(ModAPI);
             Helpers = new Helpers(ModAPI, RequestManager);
@@ -110,6 +111,7 @@ namespace EmpyrionModdingFramework
                 case CmdId.Event_Error:
                     ErrorInfo err = (ErrorInfo)data;
                     Log($"Game_Event ERROR for SeqNr: {seqNr}, ErrorType: {err.errorType}");
+                  
                     break;
                 default:
                     Log($"Game_Event {eventId} SeqNr: {seqNr} Data: {data?.ToString()}");
@@ -131,7 +133,7 @@ namespace EmpyrionModdingFramework
 
         public void Log(string msg)
         {
-            ModAPI.Log($"{msg}");
+            ModAPI.Log($"[{ModName}]{msg}");
         }
     }
 }
