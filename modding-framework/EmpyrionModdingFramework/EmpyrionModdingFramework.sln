@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModLocator", "..\ModLocator\ModLocator.csproj", "{50C5C3C8-45A9-4609-8435-6739F59602C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryManagment", "..\InventoryManagment\InventoryManagment.csproj", "{F7CD6E28-00ED-4B14-8567-E8CD79889ABF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +28,14 @@ Global
 		{98064548-5ECA-4D2C-97CB-78224487B6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98064548-5ECA-4D2C-97CB-78224487B6E6}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{98064548-5ECA-4D2C-97CB-78224487B6E6}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{50C5C3C8-45A9-4609-8435-6739F59602C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50C5C3C8-45A9-4609-8435-6739F59602C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50C5C3C8-45A9-4609-8435-6739F59602C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50C5C3C8-45A9-4609-8435-6739F59602C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7CD6E28-00ED-4B14-8567-E8CD79889ABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7CD6E28-00ED-4B14-8567-E8CD79889ABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7CD6E28-00ED-4B14-8567-E8CD79889ABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7CD6E28-00ED-4B14-8567-E8CD79889ABF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
