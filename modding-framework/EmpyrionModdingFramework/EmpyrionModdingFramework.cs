@@ -33,7 +33,6 @@ namespace EmpyrionModdingFramework
         public void Init(IModApi modApi)
         {
             ModAPI = modApi;
-            ModName = Assembly.GetExecutingAssembly().GetName().Name;
 
             ConfigManager = new ConfigManager();
             CommandManager = new CommandManager(ModAPI);
@@ -44,33 +43,17 @@ namespace EmpyrionModdingFramework
 
             try
             {
-                using (StreamReader reader = File.OpenText(ModAPI.Application.GetPathFor(AppFolder.Mod) + @"\" + $"{ModName}" + @"\" + $"{ModName}_Info.yaml"))
-                {
-                    FrameworkConfig = ConfigManager.DeserializeYaml<FrameworkConfig>(reader);
-                }
-            }
-            catch (Exception error)
-            {
-                Log($"error trying to load the main config file.");
-                Log($"{error.Message}");
-            }
-
-            try
-            {
                 Initialize();
             }
             catch (Exception error)
             {
-                Log($"initialization exception.");
-                Log($"{error}");
+                Log("initialization exception.");
+                Log(error.ToString());
             }
-            Log($"ModAPI initialization complete!");
-            if (LegacyAPI != null)
+            if (LegacyAPI == null)
             {
-                Log($"LegacyAPI initializacion complete!");
-                return;
+                Log("LegacyAPI not found. Only Client mods supported.");
             }
-            Log($"LegacyAPI not found. Only Client mods supported.");
         }
 
         public void Shutdown()
@@ -133,7 +116,7 @@ namespace EmpyrionModdingFramework
 
         public void Log(string msg)
         {
-            ModAPI.Log($"[{ModName}]{msg}");
+            ModAPI.Log($"[{ModName}] {msg}");
         }
     }
 }

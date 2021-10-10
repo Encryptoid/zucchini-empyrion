@@ -9,7 +9,7 @@ namespace EmpyrionModdingFramework
 {
     public static class ItemStackExtensions
     {
-        public static List<InventoryItem> ToInvetoryItems(this ItemStack[] inv)
+        public static List<InventoryItem> ToInventoryItems(this ItemStack[] inv)
         {
             var ret = new List<InventoryItem>();
             if (inv == null) return ret;

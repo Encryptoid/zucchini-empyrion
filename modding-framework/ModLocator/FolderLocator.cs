@@ -20,15 +20,17 @@ namespace ModLocator
         public string GetDatabaseFolder(string modName, string databaseFolder = "Database")
         {
             var modFolder = GetModFolder(modName);
-            return modFolder == null ? null : Path.Combine(modFolder, modName, databaseFolder);
+            var dbPath = Path.Combine(modFolder, databaseFolder);
+
+            _log($"{modName} will use the database path: {dbPath}");
+            return dbPath;
         }
 
         private string GetModFolder(string modName)
         {
-            _log("ModdingFramework is running from directory: " + Directory.GetCurrentDirectory());
             var modFolderFile = Path.Combine(Directory.GetCurrentDirectory(), _fileName);
 
-            if (!File.Exists(modFolderFile)) //Check for tetherporter.dbpath
+            if (!File.Exists(modFolderFile))
             {
                 _log($"{modName} cannot locate it's database path. Please place a {_fileName} file in the folder you are running the server from: {Directory.GetCurrentDirectory()}");
                 return null;
@@ -36,13 +38,14 @@ namespace ModLocator
 
             var modFolderPath = Path.GetFullPath(File.ReadAllText(modFolderFile).Trim()); //Trim spaces and parse relative paths
 
-            if (!Directory.Exists(modFolderPath)) //Check for ../Content/Mods directory
+            modFolderPath = Path.Combine(modFolderPath, modName);
+
+            if (!Directory.Exists(modFolderPath)) //Check for ../Content/Mods/{ModName}/Database directory
             {
                 _log($"{modName} cannot location it's database path, the full location it checked was: {modFolderPath}");
                 return null;
             }
 
-            _log("{modName} will use the database path: " + modFolderPath);
             return modFolderPath;
         }
     }

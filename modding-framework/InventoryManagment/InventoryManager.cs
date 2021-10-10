@@ -1,5 +1,6 @@
 ﻿using Eleon.Modding;
 using EmpyrionModdingFramework;
+using EmpyrionModdingFramework.Database;
 using InventoryManagement;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace InventoryManagement
 {
     public class InventoryManager
     {
-        private CsvManager _db;
-        public InventoryManager(CsvManager fileManager)
+        private IDatabaseManager _db;
+        public InventoryManager(IDatabaseManager databaseManager)
         {
-            _db = fileManager;
+            _db = databaseManager;
         }
 
         public Inventory GetEmptyInventory(int playerId)
@@ -26,14 +27,16 @@ namespace InventoryManagement
         public void SaveBar(string steamId, ItemStack[] itemStack) => SaveInventoryComponent(steamId, itemStack, false);
         private void SaveInventoryComponent(string steamId, ItemStack[] itemStack, bool isBag = false)
         {
-            _db.SaveStackRecord(GetFileNameExtension(steamId, isBag), itemStack.ToInvetoryItems());
+            _db.SaveRecords(GetFileNameExtension(steamId, isBag), itemStack.ToInventoryItems());
         }
 
-        public ItemStack[] LoadBag(string steamId) => LoadInventoryComponent(steamId, true);
-        public ItemStack[] LoadBar(string steamId) => LoadInventoryComponent(steamId, false);
-        private ItemStack[] LoadInventoryComponent(string steamId, bool isBag)
+        public bool LoadBag(string steamId, out ItemStack[] inventoryRecords) => LoadInventoryComponent(steamId, true, out inventoryRecords);
+        public bool LoadBar(string steamId, out ItemStack[] inventoryRecords) => LoadInventoryComponent(steamId, false, out inventoryRecords);
+        private bool LoadInventoryComponent(string steamId, bool isBag, out ItemStack[] records)
         {
-            return _db.LoadItemStackRecord(GetFileNameExtension(steamId, isBag)).Select(e => e.ToItemStack()).ToArray();
+            var success = _db.LoadRecords<InventoryItem>(GetFileNameExtension(steamId, isBag), out var dbRecord);
+            records = success ? dbRecord.Select(e => e.ToItemStack()).ToArray() : null;
+            return success;
         }
 
         private string GetFileNameExtension(string fileName, bool isBag)

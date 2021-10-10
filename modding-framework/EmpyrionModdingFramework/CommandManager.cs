@@ -48,7 +48,7 @@ namespace EmpyrionModdingFramework
 
         public async void ProcessChatCommand(MessageData data)
         {
-            ChatCommand chatCommand = CommandList.FirstOrDefault(C => data.Text.StartsWith(CommandPrexix + C.cmdText));
+            ChatCommand chatCommand = CommandList.FirstOrDefault(C => data.Text.Equals(CommandPrexix + C.cmdText));
             if ((chatCommand == null) || (chatCommand.cmdHandler == null))
             {
                 return;
