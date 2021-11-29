@@ -35,11 +35,11 @@ namespace EmpyrionModdingFramework
             ModAPI = modApi;
 
             ConfigManager = new ConfigManager();
-            CommandManager = new CommandManager(ModAPI);
+            CommandManager = new CommandManager(ModAPI, RequestManager);
             Helpers = new Helpers(ModAPI, RequestManager);
             FrameworkConfig = new FrameworkConfig();
 
-            ModAPI.Application.ChatMessageSent += CommandManager.ProcessChatMessage;
+            ModAPI.Application.ChatMessageSent += CommandManager.ProcessChatMessageAsync;
 
             try
             {
@@ -58,7 +58,7 @@ namespace EmpyrionModdingFramework
 
         public void Shutdown()
         {
-            ModAPI.Application.ChatMessageSent -= CommandManager.ProcessChatMessage;
+            ModAPI.Application.ChatMessageSent -= CommandManager.ProcessChatMessageAsync;
             Log($"shutting down");
         }
 

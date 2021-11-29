@@ -48,5 +48,22 @@ namespace EmpyrionModdingFramework
                 rot = new PVector3 { x = rotX, y = rotY, z = rotZ }
             });
         }
+
+        public async Task<PlayerInfo> QueryPlayerInfo(int entityId)
+        {
+            PlayerInfo player = null;
+
+            try
+            {
+                player = (PlayerInfo)await RequestManager.SendGameRequest(
+                   CmdId.Request_Player_Info, new Id() { id = entityId });
+            }
+            catch
+            {
+                await MessagePlayer(entityId, $"Could not retrieve info for EntityId: {entityId}", 5, MessagerPriority.Red);
+            }
+
+            return player;
+        }
     }
 }
