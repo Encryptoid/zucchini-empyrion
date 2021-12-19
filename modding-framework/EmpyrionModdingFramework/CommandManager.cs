@@ -121,5 +121,11 @@ namespace EmpyrionModdingFramework
         {
             return int.TryParse(parameters[paramIndex] as string, out paramValue);
         }
+
+        public static bool ParseStringParam(object[] parameters, int paramIndex, out string paramValue)
+        {
+            paramValue = parameters[paramIndex].ToString();
+            return paramValue != null;
+        }
     }
 }

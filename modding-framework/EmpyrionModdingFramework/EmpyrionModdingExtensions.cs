@@ -1,4 +1,6 @@
 ﻿using Eleon.Modding;
+using EmpyrionModdingFramework.Database;
+using EmpyrionModdingFramework.Teleport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +39,20 @@ namespace EmpyrionModdingFramework
             });
         }
 
+        public void ShowLinkedDialog(int entityId, string message, string title, Action<int, string, string, int, int> linkCallback)
+        {
+            var dialogConfig = new DialogConfig()
+            {
+                ButtonTexts = new string[] { null, null, "Cancel" },
+                ButtonIdxForEnter = -1,
+                ButtonIdxForEsc = -1,
+                BodyText = message,
+                TitleText = title
+            };
+
+            ModAPI.Application.ShowDialogBox(entityId, dialogConfig, new DialogActionHandler(linkCallback), 99); //TODO Get Valid ID
+        }
+
         public async Task TeleportPlayer(int entityId, string playfield, float posX, float posY, float posZ, float rotX, float rotY, float rotZ)
         {
             Log($"Teleporting entity: {entityId} to playfield: {playfield}");
@@ -64,6 +80,11 @@ namespace EmpyrionModdingFramework
             }
 
             return player;
+        }
+
+        public bool IsAdmin(int playerPermission)
+        {
+            return playerPermission >= (int)PlayerPermission.Admin;
         }
     }
 }
