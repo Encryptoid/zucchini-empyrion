@@ -6,11 +6,22 @@ using System.Threading.Tasks;
 
 namespace EmpyrionModdingFramework.Database
 {
+    public enum DatabaseSubComponent
+    {
+        Tethers,
+        Events,
+        Inventory
+    }
     public interface IDatabaseManager
     {
-        void SaveRecord<T>(string recordId, T record, bool clearExisting = true);
-        void SaveRecords<T>(string recordId, List<T> records, bool clearExisting = true);
-        bool LoadRecord<T>(string recordId, out T record);
-        bool LoadRecords<T>(string recordId, out List<T> records);
+        void SaveRecord<T>(string recordId, T record, bool clearExisting);
+        void SaveRecords<T>(string recordId, List<T> records, bool clearExisting);
+        List<T> LoadRecords<T>(string recordId);
+        string _databasePath { get; }
+    }
+
+    public interface IDatabaseRecord
+    {
+        string RecordName{ get; }
     }
 }

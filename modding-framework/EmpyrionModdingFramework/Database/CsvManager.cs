@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using EmpyrionModdingFramework.Database;
+using EmpyrionModdingFramework.Teleport;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,38 +12,30 @@ namespace InventoryManagement
 {
     public class CsvManager: IDatabaseManager
     {
-        private string _databasePath;
+        public string _databasePath { get; }
 
         public CsvManager(string databasePath)
         {
             _databasePath = databasePath;
         }
 
-        public void SaveRecord<T>(string fileName, T record, bool clearExisting = true)
+        public List<T> LoadRecords<T>(string fileName)
         {
-            SaveRecords(fileName, new List<T> { record }, clearExisting);
+            return LoadCsvRows<T>(fileName);
         }
 
-        public void SaveRecords<T>(string fileName, List<T> records, bool clearExisting = true)
+        private T LoadSingularCsvRow<T>(string fileName)
         {
-            var path = FormatFilePath(fileName);
+            var rows = LoadCsvRows<T>(fileName);
+            if (rows.Count == 0)
+            {
+                return default(T);
+            }
 
-            if (clearExisting && File.Exists(path))
-                File.Delete(path);
-
-            using (var stream = new StreamWriter(path))
-            using (var csv = new CsvWriter(stream, CultureInfo.InvariantCulture))
-                csv.WriteRecords(records);
+            return rows.FirstOrDefault();
         }
 
-        public bool LoadRecord<T>(string fileName, out T record)
-        {
-            var success = LoadRecords<T>(fileName, out var records);
-            record = success ? records.FirstOrDefault() : default;
-            return success;
-        }
-
-        public bool LoadRecords<T>(string fileName, out List<T> records)
+        private List<T> LoadCsvRows<T>(string fileName)
         {
             var path = FormatFilePath(fileName);
 
@@ -52,24 +45,55 @@ namespace InventoryManagement
                 Delimiter = ","
             };
 
+            var rows = new List<T>();
+
             try
             {
                 using (var stream = new StreamReader(path))
                 using (var csv = new CsvReader(stream, config))
-                    records = csv.GetRecords<T>().ToList();
+                    rows = csv.GetRecords<T>().ToList();
             }
-            catch
-            {
-                records = null;
-                return false;
+            catch {
+                return null;
             }
 
-            return true;
+            return rows;
+        }
+
+        public void SaveRecord<T>(string fileName, T record, bool clearExisting)
+        {
+            var path = FormatFilePath(fileName);
+
+            var fileExists = File.Exists(path);
+
+            if (fileExists)
+                File.Delete(path);
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+            config.NewLine = "\r\n";
+
+            using (var stream = new StreamWriter(path))
+            using (var csv = new CsvWriter(stream, config))
+            {
+                csv.WriteHeader(typeof(T));
+                csv.NextRecord();
+                csv.WriteRecord(record);
+            }
         }
 
         private string FormatFilePath(string filename)
         {
-            return Path.Combine(_databasePath, $"{filename}");
+            return Path.Combine(_databasePath, filename);
+        }
+
+        public void SaveRecords<T>(string fileName, List<T> records, bool clearExisting)
+        {
+            var path = FormatFilePath(fileName);
+            if (clearExisting && File.Exists(path))
+                File.Delete(path);
+
+            foreach (T record in records)
+                SaveRecord<T>(fileName, record, false);
         }
     }
 }

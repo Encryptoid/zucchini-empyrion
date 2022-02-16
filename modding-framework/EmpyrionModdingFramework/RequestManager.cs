@@ -29,7 +29,6 @@ namespace EmpyrionModdingFramework
       return await tcs.Task;
     }
 
-
     private ushort AddTaskCompletionSource(TaskCompletionSource<object> tcs)
     {
       if (nextSeqNr == ushort.MaxValue)

@@ -80,12 +80,16 @@
     <Compile Include="EmpyrionModdingExtensions.cs" />
     <Compile Include="EmpyrionModdingFramework.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="PlayerInfoExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestManager.cs" />
+    <Compile Include="Teleport\LocationRecord.cs" />
+    <Compile Include="Teleport\PlayerLocationRecord.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -27,16 +27,14 @@ namespace InventoryManagement
         public void SaveBar(string steamId, ItemStack[] itemStack) => SaveInventoryComponent(steamId, itemStack, false);
         private void SaveInventoryComponent(string steamId, ItemStack[] itemStack, bool isBag = false)
         {
-            _db.SaveRecords(GetFileNameExtension(steamId, isBag), itemStack.ToInventoryItems());
+            _db.SaveRecords(GetFileNameExtension(steamId, isBag), itemStack.ToInventoryItems(), false);
         }
 
         public bool LoadBag(string steamId, out ItemStack[] inventoryRecords) => LoadInventoryComponent(steamId, true, out inventoryRecords);
         public bool LoadBar(string steamId, out ItemStack[] inventoryRecords) => LoadInventoryComponent(steamId, false, out inventoryRecords);
         private bool LoadInventoryComponent(string steamId, bool isBag, out ItemStack[] records)
         {
-            var success = _db.LoadRecords<InventoryItem>(GetFileNameExtension(steamId, isBag), out var dbRecord);
-            records = success ? dbRecord.Select(e => e.ToItemStack()).ToArray() : null;
-            return success;
+            throw new MissingMethodException();
         }
 
         private string GetFileNameExtension(string fileName, bool isBag)
