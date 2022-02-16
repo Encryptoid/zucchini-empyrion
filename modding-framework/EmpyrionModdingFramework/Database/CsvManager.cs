@@ -64,23 +64,19 @@ namespace InventoryManagement
         {
             var path = FormatFilePath(fileName);
 
-            if (clearExisting && File.Exists(path))
+            var fileExists = File.Exists(path);
+
+            if (fileExists)
                 File.Delete(path);
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture);
-            var fileMode = FileMode.CreateNew;
+            config.NewLine = "\r\n";
 
-            if (File.Exists(path))
+            using (var stream = new StreamWriter(path))
+            using (var csv = new CsvWriter(stream, config))
             {
-                config.HasHeaderRecord = false;
-                fileMode = FileMode.Append;
-            }
-
-            using (var stream = File.Open(path, fileMode))
-            using (var streamWriter = new StreamWriter(stream))
-            using (var csv = new CsvWriter(streamWriter, config))
-            {
-                if (File.Exists(path)) csv.NextRecord();
+                csv.WriteHeader(typeof(T));
+                csv.NextRecord();
                 csv.WriteRecord(record);
             }
         }

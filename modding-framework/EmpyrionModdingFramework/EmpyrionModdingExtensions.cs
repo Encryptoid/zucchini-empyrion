@@ -53,6 +53,13 @@ namespace EmpyrionModdingFramework
             ModAPI.Application.ShowDialogBox(entityId, dialogConfig, new DialogActionHandler(linkCallback), 99); //TODO Get Valid ID
         }
 
+        public async Task TeleportPlayerToPlayer(int playerId, int targetId)
+        {
+            var target = await QueryPlayerInfo(targetId);
+
+            await TeleportPlayer(playerId, target.playfield, target.pos.x, target.pos.y, target.pos.z, target.rot.x, target.rot.y, target.rot.z);
+        }
+
         public async Task TeleportPlayer(int entityId, string playfield, float posX, float posY, float posZ, float rotX, float rotY, float rotZ)
         {
             Log($"Teleporting entity: {entityId} to playfield: {playfield}");
@@ -85,6 +92,23 @@ namespace EmpyrionModdingFramework
         public bool IsAdmin(int playerPermission)
         {
             return playerPermission >= (int)PlayerPermission.Admin;
+        }
+
+        public async Task<List<int>> QueryPlayerList()
+        {
+            List<int> playerIds = new List<int>();
+
+            try
+            {
+                var idList = (IdList)await RequestManager.SendGameRequest(CmdId.Request_Player_List, null);
+                playerIds = idList.list;
+            }
+            catch(Exception e)
+            {
+                Log($"Could not retrieve player list. Exception: {e}");
+            }
+
+            return playerIds;
         }
     }
 }
