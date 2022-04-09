@@ -23,6 +23,8 @@ The relative path would be "../Content/Mods"
 
 The relative path above should be the only text in the file(without quotations)
 
+Plase read the setup notes below on how to deterime your relative path.
+
 # Initial Setup Steps
 In order to find the run directory, copy a mod folder and it's content to your Empyrion mods folder i.e: "Empyrion - Dedicated Server\Content\Mods"
 
